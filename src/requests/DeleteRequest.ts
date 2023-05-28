@@ -1,16 +1,15 @@
 import { ApiClient } from "../ApiRequest";
 
-export class GetRequest<T> {
+export class DeleteRequest<T> {
 
   private client: ApiClient<T>;
-
   constructor() {
     this.client = new ApiClient();
   }
 
-  async getRequest(path: string, isTextRequest?: boolean): Promise<T> {
+  async deleteRequest(path: string): Promise<T> {
     try {
-      const response = await this.client.get(path, isTextRequest);
+      const response = await this.client.delete(path);
       return response;
     } catch (err) {
       console.error("Error: Using " + path, err);

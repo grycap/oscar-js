@@ -1,6 +1,6 @@
 import { ApiClient } from "../ApiRequest";
 
-export class GetRequest<T> {
+export class PutRequest<T> {
 
   private client: ApiClient<T>;
 
@@ -8,9 +8,9 @@ export class GetRequest<T> {
     this.client = new ApiClient();
   }
 
-  async getRequest(path: string, isTextRequest?: boolean): Promise<T> {
+  async putRequest(path: string, body: any): Promise<T> {
     try {
-      const response = await this.client.get(path, isTextRequest);
+      const response = await this.client.put(path, body);
       return response;
     } catch (err) {
       console.error("Error: Using " + path, err);

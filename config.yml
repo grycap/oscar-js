@@ -1,4 +1,4 @@
 client:
   baseUri: "http://localhost/"
-  username: USERNAME
-  password: PASSWORD
+  username: oscar
+  password: 1234sarh
