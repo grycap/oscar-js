@@ -1,4 +1,5 @@
 client:
-  baseUri: "http://localhost/"
+  oscar_endpoint: "http://localhost/"
+  auth_type: basicauth
   username: oscar
-  password: 1234sarh
+  password: YTYzNThk
