@@ -8,9 +8,9 @@ export class PutRequest<T> {
     this.client = new ApiClient();
   }
 
-  async putRequest(path: string, body: any): Promise<T> {
+  async putRequest(path: string, body: any, authorization? : string): Promise<T> {
     try {
-      const response = await this.client.put(path, body);
+      const response = await this.client.put(path, body, authorization);
       return response;
     } catch (err) {
       console.error("Error: Using " + path, err);

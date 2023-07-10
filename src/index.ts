@@ -28,33 +28,38 @@ const upload = multer({ storage });
 // -------------------------------------
 
 app.get("/info", async (req, res) => {
+  const authorization = req.headers.authorization;
   const getRequest = new GetRequest<Info>();
-  const rta = await getRequest.getRequest(pathInfo);
+  const rta = await getRequest.getRequest(pathInfo, false, authorization);
   res.send(rta);
 });
 
 app.get("/config", async (req, res) => {
+  const authorization = req.headers.authorization;
   const getRequest = new GetRequest<Config>();
-  const rta = await getRequest.getRequest(pathConfig);
+  const rta = await getRequest.getRequest(pathConfig, false, authorization);
   res.send(rta);
 });
 
 app.get("/health", async (req, res) => {
+  const authorization = req.headers.authorization;
   const getRequest = new GetRequest<String>();
-  const rta = await getRequest.getRequest(pathHealth, true);
+  const rta = await getRequest.getRequest(pathHealth, false, authorization);
   res.send(rta);
 });
 
 app.get("/services", async (req, res) => {
+  const authorization = req.headers.authorization;
   const getRequest = new GetRequest<Service[]>();
-  const services: Service[] = await getRequest.getRequest(pathServices);
+  const services: Service[] = await getRequest.getRequest(pathServices, false, authorization);
   res.send(services);
 });
 
 app.get("/services/:serviceName", async (req, res) => {
   try {
+    const authorization = req.headers.authorization;
     const getRequest = new GetRequest<Service>();
-    const service: Service = await getRequest.getRequest(pathServices + req.params.serviceName);
+    const service: Service = await getRequest.getRequest(pathServices + req.params.serviceName, false, authorization);
     res.send(service);
   } catch (error) {
     res.status(404).send(error);
@@ -63,8 +68,9 @@ app.get("/services/:serviceName", async (req, res) => {
 
 app.get("/logs/:serviceName", async (req, res) => {
   try {
+    const authorization = req.headers.authorization;
     const getRequest = new GetRequest<JobInfo[]>();
-    const jobs: JobInfo[] = await getRequest.getRequest(pathLogs + req.params.serviceName);
+    const jobs: JobInfo[] = await getRequest.getRequest(pathLogs + req.params.serviceName, false, authorization);
     res.send(jobs);
   } catch (error) {
     res.status(404).send(error);
@@ -73,8 +79,9 @@ app.get("/logs/:serviceName", async (req, res) => {
 
 app.get("/logs/:serviceName/:jobName", async (req, res) => {
   try {
+    const authorization = req.headers.authorization;
     const getRequest = new GetRequest<JobInfo[]>();
-    const jobs: JobInfo[] = await getRequest.getRequest(pathLogs + req.params.serviceName + "/" + req.params.jobName, true);
+    const jobs: JobInfo[] = await getRequest.getRequest(pathLogs + req.params.serviceName + "/" + req.params.jobName, true, authorization);
     res.send(jobs);
   } catch (error) {
     res.status(404).send(error);
@@ -87,9 +94,10 @@ app.get("/logs/:serviceName/:jobName", async (req, res) => {
 
 app.post("/services", async (req, res) => {
   try {
+    const authorization = req.headers.authorization;
     const postRequest = new PostRequest<Service>()
     const requestBody = req.body;
-    const service: Service = await postRequest.postRequest(pathServices, requestBody);
+    const service: Service = await postRequest.postRequest(pathServices, requestBody, authorization);
     res.send(service);
   } catch (error) {
     res.status(404).send(error);
@@ -98,6 +106,7 @@ app.post("/services", async (req, res) => {
 
 app.post("/run/:serviceName", upload.single('file'), async (req, res) => {
   try {
+    const authorization = req.headers.authorization;
     const file = req.file; // Archivo cargado
 
     if (!file) {
@@ -108,11 +117,11 @@ app.post("/run/:serviceName", upload.single('file'), async (req, res) => {
     const fileData = file.buffer.toString('base64');
 
     const getServiceRequest = new GetRequest<Service>();
-    const service: Service = await getServiceRequest.getRequest(pathServices + req.params.serviceName);
+    const service: Service = await getServiceRequest.getRequest(pathServices + req.params.serviceName, false, authorization);
     var service_token = service.token;
 
     const postRunRequest = new PostRequest<JSON>();
-    const response = await postRunRequest.postRequest(runSync + req.params.serviceName, fileData, service_token);
+    const response = await postRunRequest.postRequest(runSync + req.params.serviceName, fileData, "Bearer " + service_token);
 
     const decodedResponse = Buffer.from(JSON.stringify(response), 'base64').toString('utf-8');
     const parsedResponse = JSON.parse(decodedResponse.replace(/'/g, '"'));
@@ -134,9 +143,10 @@ app.post("/job/:serviceName", async (req, res) => {
 // -------------------------------------
 app.put("/services", async (req, res) => {
   try {
+    const authorization = req.headers.authorization;
     const putRequest = new PutRequest<Service>()
     const requestBody = req.body;
-    const service: Service = await putRequest.putRequest(pathServices, requestBody);
+    const service: Service = await putRequest.putRequest(pathServices, requestBody, authorization);
     res.send(service);
   } catch (error) {
     res.status(404).send(error);
@@ -149,8 +159,9 @@ app.put("/services", async (req, res) => {
 
 app.delete("/services/:serviceName", async (req, res) => {
   try {
+    const authorization = req.headers.authorization;
     const deleteRequest = new DeleteRequest<String>()
-    await deleteRequest.deleteRequest(pathServices + req.params.serviceName);
+    await deleteRequest.deleteRequest(pathServices + req.params.serviceName, authorization);
     res.send("Service " + req.params.serviceName + " has been successfully removed");
   } catch (error) {
     res.status(404).send(error);
@@ -159,8 +170,9 @@ app.delete("/services/:serviceName", async (req, res) => {
 
 app.delete("/logs/:serviceName", async (req, res) => {
   try {
+    const authorization = req.headers.authorization;
     const deleteRequest = new DeleteRequest<String>()
-    await deleteRequest.deleteRequest(pathLogs + req.params.serviceName);
+    await deleteRequest.deleteRequest(pathLogs + req.params.serviceName, authorization);
     res.send("Logs in the service " + req.params.serviceName + " has been successfully removed");
   } catch (error) {
     res.status(404).send(error);
@@ -169,8 +181,9 @@ app.delete("/logs/:serviceName", async (req, res) => {
 
 app.delete("/logs/:serviceName/:jobName", async (req, res) => {
   try {
+    const authorization = req.headers.authorization;
     const deleteRequest = new DeleteRequest<String>()
-    await deleteRequest.deleteRequest(pathLogs + req.params.serviceName + "/" + req.params.jobName);
+    await deleteRequest.deleteRequest(pathLogs + req.params.serviceName + "/" + req.params.jobName, authorization);
     res.send("Logs in the service " + req.params.serviceName + " with job name " + req.params.jobName + " has been successfully removed");
   } catch (error) {
     res.status(404).send(error);

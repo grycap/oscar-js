@@ -8,9 +8,9 @@ export class PostRequest<T> {
     this.client = new ApiClient( );
   }
 
-  async postRequest(path: string, body: any, token?: string): Promise<T> {
+  async postRequest(path: string, body: any, authorization? : string): Promise<T> {
     try {
-      const response = await this.client.post(path, body, token);
+      const response = await this.client.post(path, body, authorization);
       return response;
       
     } catch (err) {

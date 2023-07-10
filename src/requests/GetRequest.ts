@@ -8,9 +8,9 @@ export class GetRequest<T> {
     this.client = new ApiClient();
   }
 
-  async getRequest(path: string, isTextRequest?: boolean): Promise<T> {
+  async getRequest(path: string, isTextRequest?: boolean, authorization? : string): Promise<T> {
     try {
-      const response = await this.client.get(path, isTextRequest);
+      const response = await this.client.get(path, isTextRequest, authorization);
       return response;
     } catch (err) {
       console.error("Error: Using " + path, err);

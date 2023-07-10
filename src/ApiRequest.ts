@@ -15,24 +15,42 @@ export class ApiClient<T> {
     this.oscar_endpoint = this.clientConfig.oscar_endpoint;
   }
 
-  setAuthParams(token?: String): string {
+  setAuthParams(authorization?: string): string {
     if (this.clientConfig.auth_type == AuthType.BasicAuth) {
       this.auth = "Basic " + Buffer.from(this.clientConfig.username + ":" + this.clientConfig.password).toString("base64");
     }
 
-    if (this.clientConfig.auth_type == AuthType.Oidc || token != undefined) {
+    if (this.clientConfig.auth_type == AuthType.Oidc || authorization != undefined) {
+      const token = this.tokenValidation(authorization);
       this.auth = "Bearer " + token;
     }
 
     return this.auth;
   }
 
-  async get(path: string, isText = false, token?: string): Promise<any> {
+  tokenValidation(authorization?: string): string {
+    if(!authorization) {
+      throw new Error(`Authorization Error! Token not found`);
+    }
+    const isBearer = authorization.split(' ')[0] == "Bearer" ? true : false;
+    const isToken = authorization.split(' ')[1] != null ? true : false;
+
+    if (!isBearer) {
+      throw new Error(`Authorization Error! Not a valid bearer token`);
+    }
+    if (!isToken) {
+      throw new Error(`Authorization Error! Not a valid bearer token`);
+    }
+
+    return authorization.split(' ')[1];
+  }
+
+  async get(path: string, isText = false, authorization?: string): Promise<any> {
     const url = new URL(path, this.oscar_endpoint);
     const headers = new Headers();
 
     // Set authorization parameters according to configuration
-    this.setAuthParams(token);
+    this.setAuthParams(authorization);
     headers.append('Authorization', this.auth);
     console.log("GET Request in url:", url.toString());
 
@@ -54,13 +72,13 @@ export class ApiClient<T> {
     return data;
   }
 
-  async post(path: string, body: any, token?: string): Promise<T> {
+  async post(path: string, body: any, authorization?: string): Promise<T> {
     // Convert buffer to string
     const url = new URL(path, this.oscar_endpoint);
     const headers = new Headers();
 
     // Set authorization parameters according to configuration
-    this.setAuthParams(token);
+    this.setAuthParams(authorization);
     headers.append('Authorization', this.auth);
     headers.append('Content-Type', 'application/json');
     console.log("POST Request in url:", url.toString());
@@ -92,12 +110,12 @@ export class ApiClient<T> {
     }
   }
 
-  async put(path: string, body: any, token?: string): Promise<T> {
+  async put(path: string, body: any, authorization?: string): Promise<T> {
     const url = new URL(path, this.oscar_endpoint);
     const headers = new Headers();
 
     // Set authorization parameters according to configuration
-    this.setAuthParams(token);
+    this.setAuthParams(authorization);
     headers.append('Authorization', this.auth);
     headers.append('Content-Type', 'application/json');
     console.log("PUT Request in url:", url.toString());
@@ -123,12 +141,12 @@ export class ApiClient<T> {
   }
 
 
-  async delete(path: string, token?: string): Promise<any> {
+  async delete(path: string, authorization?: string): Promise<any> {
     const url = new URL(path, this.oscar_endpoint);
     const headers = new Headers();
 
     // Set authorization parameters according to configuration
-    this.setAuthParams(token);
+    this.setAuthParams(authorization);
     headers.append('Authorization', this.auth);
     console.log("DELETE Request in url:", url.toString());
 
@@ -145,4 +163,5 @@ export class ApiClient<T> {
     const status = response.status;
     return status;
   }
+
 }
