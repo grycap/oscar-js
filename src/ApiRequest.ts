@@ -36,10 +36,10 @@ export class ApiClient<T> {
     const isToken = authorization.split(' ')[1] != null ? true : false;
 
     if (!isBearer) {
-      throw new Error(`Authorization Error! Not a valid bearer token`);
+      throw new UnauthorizedError(`Authorization Error! Not a valid bearer token`);
     }
     if (!isToken) {
-      throw new Error(`Authorization Error! Not a valid bearer token`);
+      throw new UnauthorizedError(`Authorization Error! Not a valid bearer token`);
     }
 
     return authorization.split(' ')[1];
