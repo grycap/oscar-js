@@ -5,6 +5,7 @@ import { GetRequest } from "./requests/GetRequest";
 import { Config, Info, JobInfo, Service } from "./models/Models";
 import { PutRequest } from "./requests/PutRequest";
 import { DeleteRequest } from "./requests/DeleteRequest";
+import { UnauthorizedError } from "./requests/UnauthorizedError";
 
 const app = express();
 const pathConfig = "system/config/";
@@ -36,8 +37,9 @@ app.get("/info", async (req, res) => {
   } catch (error) {
     if (error instanceof UnauthorizedError) {
       res.status(401).send(error);
+    } else {
+      res.status(404).send(error);
     }
-    res.status(404).send(error);
   }
 });
 
@@ -50,8 +52,9 @@ app.get("/config", async (req, res) => {
   } catch (error) {
     if (error instanceof UnauthorizedError) {
       res.status(401).send(error);
+    } else {
+      res.status(404).send(error);
     }
-    res.status(404).send(error);
   }
 });
 
@@ -64,8 +67,9 @@ app.get("/health", async (req, res) => {
   } catch (error) {
     if (error instanceof UnauthorizedError) {
       res.status(401).send(error);
+    } else {
+      res.status(404).send(error);
     }
-    res.status(404).send(error);
   }
 });
 
@@ -78,8 +82,9 @@ app.get("/services", async (req, res) => {
   } catch (error) {
     if (error instanceof UnauthorizedError) {
       res.status(401).send(error);
+    } else {
+      res.status(404).send(error);
     }
-    res.status(404).send(error);
   }
 });
 
@@ -92,8 +97,9 @@ app.get("/services/:serviceName", async (req, res) => {
   } catch (error) {
     if (error instanceof UnauthorizedError) {
       res.status(401).send(error);
+    } else {
+      res.status(404).send(error);
     }
-    res.status(404).send(error);
   }
 });
 
@@ -106,8 +112,9 @@ app.get("/logs/:serviceName", async (req, res) => {
   } catch (error) {
     if (error instanceof UnauthorizedError) {
       res.status(401).send(error);
+    } else {
+      res.status(404).send(error);
     }
-    res.status(404).send(error);
   }
 });
 
@@ -124,8 +131,9 @@ app.get("/logs/:serviceName/:jobName", async (req, res) => {
   } catch (error) {
     if (error instanceof UnauthorizedError) {
       res.status(401).send(error);
+    } else {
+      res.status(404).send(error);
     }
-    res.status(404).send(error);
   }
 });
 
@@ -143,8 +151,9 @@ app.post("/services", async (req, res) => {
   } catch (error) {
     if (error instanceof UnauthorizedError) {
       res.status(401).send(error);
+    } else {
+      res.status(404).send(error);
     }
-    res.status(404).send(error);
   }
 });
 
@@ -182,8 +191,9 @@ app.post("/run/:serviceName", upload.single("file"), async (req, res) => {
   } catch (error) {
     if (error instanceof UnauthorizedError) {
       res.status(401).send(error);
+    } else {
+      res.status(404).send(error);
     }
-    res.status(404).send(error);
   }
 });
 
@@ -202,8 +212,9 @@ app.put("/services", async (req, res) => {
   } catch (error) {
     if (error instanceof UnauthorizedError) {
       res.status(401).send(error);
+    } else {
+      res.status(404).send(error);
     }
-    res.status(404).send(error);
   }
 });
 
@@ -218,7 +229,11 @@ app.delete("/services/:serviceName", async (req, res) => {
     await deleteRequest.deleteRequest(pathServices + req.params.serviceName, authorization);
     res.send("Service " + req.params.serviceName + " has been successfully removed");
   } catch (error) {
-    res.status(404).send(error);
+    if (error instanceof UnauthorizedError) {
+      res.status(401).send(error);
+    } else {
+      res.status(404).send(error);
+    }
   }
 });
 
@@ -231,8 +246,9 @@ app.delete("/logs/:serviceName", async (req, res) => {
   } catch (error) {
     if (error instanceof UnauthorizedError) {
       res.status(401).send(error);
+    } else {
+      res.status(404).send(error);
     }
-    res.status(404).send(error);
   }
 });
 
@@ -251,8 +267,9 @@ app.delete("/logs/:serviceName/:jobName", async (req, res) => {
   } catch (error) {
     if (error instanceof UnauthorizedError) {
       res.status(401).send(error);
+    } else {
+      res.status(404).send(error);
     }
-    res.status(404).send(error);
   }
 });
 

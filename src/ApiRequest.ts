@@ -2,6 +2,7 @@ import fetch, { Headers } from 'node-fetch';
 import { AuthType, ClientConfig } from "./models/Models"
 import * as fs from 'fs';
 import * as yaml from 'js-yaml';
+import { UnauthorizedError } from './requests/UnauthorizedError';
 
 
 export class ApiClient<T> {
@@ -29,28 +30,36 @@ export class ApiClient<T> {
   }
 
   tokenValidation(authorization?: string): string {
-    if(!authorization) {
-      throw new Error(`Authorization Error! Token not found`);
-    }
-    const isBearer = authorization.split(' ')[0] == "Bearer" ? true : false;
-    const isToken = authorization.split(' ')[1] != null ? true : false;
 
-    if (!isBearer) {
-      throw new UnauthorizedError(`Authorization Error! Not a valid bearer token`);
-    }
-    if (!isToken) {
-      throw new UnauthorizedError(`Authorization Error! Not a valid bearer token`);
-    }
+      if(!authorization) {
+        throw new UnauthorizedError(`Authorization Error! Token not found`);
+      }
+      const isBearer = authorization.split(' ')[0] == "Bearer" ? true : false;
+      const token = authorization.split(' ')[1];
+  
+      if (!isBearer) {
+        throw new UnauthorizedError(`Authorization Error! Not a valid bearer token`);
+      }
 
-    return authorization.split(' ')[1];
+      if (token == null) {
+        throw new UnauthorizedError(`Authorization Error! Not a valid bearer token`);
+      }
+
+      const parts = token.split('.');
+      if (parts.length !== 3) {
+        throw new UnauthorizedError(`Authorization Error! Not a valid token`);
+      }
+  
+      return authorization.split(' ')[1];
+
   }
 
   async get(path: string, isText = false, authorization?: string): Promise<any> {
     const url = new URL(path, this.oscar_endpoint);
-    const headers = new Headers();
-
     // Set authorization parameters according to configuration
     this.setAuthParams(authorization);
+
+    const headers = new Headers();
     headers.append('Authorization', this.auth);
     console.log("GET Request in url:", url.toString());
 
@@ -61,6 +70,9 @@ export class ApiClient<T> {
 
     // Verify if response have an error (4xx or 5xx)
     if (!response.ok) {
+      if(response.status == 401) {
+        throw new UnauthorizedError("Unauthorized!!");
+      }
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
@@ -91,6 +103,9 @@ export class ApiClient<T> {
 
     // Verify if response have an error (4xx or 5xx)
     if (!response.ok) {
+      if(response.status == 401) {
+        throw new UnauthorizedError("Unauthorized!!");
+      }
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
@@ -128,6 +143,9 @@ export class ApiClient<T> {
 
     // Verify if response have an error (4xx or 5xx)
     if (!response.ok) {
+      if(response.status == 401) {
+        throw new UnauthorizedError("Unauthorized");
+      }
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
@@ -157,6 +175,9 @@ export class ApiClient<T> {
 
     // Verify if response have an error (4xx or 5xx)
     if (!response.ok) {
+      if(response.status == 401) {
+        throw new UnauthorizedError("Unauthorized");
+      }
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
