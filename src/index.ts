@@ -6,6 +6,7 @@ import { Config, Info, JobInfo, Service } from "./models/Models";
 import { PutRequest } from "./requests/PutRequest";
 import { DeleteRequest } from "./requests/DeleteRequest";
 import { UnauthorizedError } from "./requests/UnauthorizedError";
+import cors from 'cors';
 
 const app = express();
 const pathConfig = "system/config/";
@@ -19,6 +20,9 @@ const port = process.env.PORT || 3000;
 //middleware
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
+
+// Habilitar solicitudes CORS para todas las rutas
+app.use(cors());
 
 // Configuración de multer
 const storage = multer.memoryStorage();
@@ -181,7 +185,7 @@ app.post("/run/:serviceName", upload.single("file"), async (req, res) => {
     const response = await postRunRequest.postRequest(
       runSync + req.params.serviceName,
       fileData,
-      "Bearer " + service_token
+      "ServiceToken " + service_token
     );
 
     const decodedResponse = Buffer.from(JSON.stringify(response), "base64").toString("utf-8");

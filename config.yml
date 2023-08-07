@@ -1,5 +1,5 @@
 client:
-  oscar_endpoint: "https://inference.cloud.ai4eosc.eu/"
-  auth_type: oidc
+  oscar_endpoint: "https://inference.cloud.ai4eosc.eu/" #"http://localhost"
+  auth_type: oidc #basicauth 
   username: oscar
   password: YTYzNThk

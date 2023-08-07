@@ -16,17 +16,32 @@ export class ApiClient<T> {
     this.oscar_endpoint = this.clientConfig.oscar_endpoint;
   }
 
-  setAuthParams(authorization?: string): string {
+  setAuthParams(authorization?: any): string {
     if (this.clientConfig.auth_type == AuthType.BasicAuth) {
       this.auth = "Basic " + Buffer.from(this.clientConfig.username + ":" + this.clientConfig.password).toString("base64");
+      
+      if (this.isServiceToken(authorization)) {
+        this.auth = 'Bearer ' + authorization.split(' ')[1];
+      }
+
+      return this.auth;
+  
     }
 
     if (this.clientConfig.auth_type == AuthType.Oidc || authorization != undefined) {
-      const token = this.tokenValidation(authorization);
-      this.auth = "Bearer " + token;
+
+      if (this.isServiceToken(authorization)) {
+        this.auth = 'Bearer ' + authorization.split(' ')[1];
+      }
+      return this.auth;
     }
 
     return this.auth;
+  }
+
+  isServiceToken(authorization: any): boolean {
+    const isServiceToken = authorization.split(' ')[0] == "ServiceToken" ? true : false;
+    return isServiceToken;
   }
 
   tokenValidation(authorization?: string): string {
@@ -34,6 +49,7 @@ export class ApiClient<T> {
       if(!authorization) {
         throw new UnauthorizedError(`Authorization Error! Token not found`);
       }
+
       const isBearer = authorization.split(' ')[0] == "Bearer" ? true : false;
       const token = authorization.split(' ')[1];
   
