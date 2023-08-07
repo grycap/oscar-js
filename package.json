@@ -1,0 +1,37 @@
+{
+  "name": "oscar_javascript",
+  "version": "1.0.0",
+  "description": "Javascript client to interact with OSCAR cluster and services",
+  "main": "./dist/index.js",
+  "scripts": {
+    "start:prod": "node ./dist/index.js",
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "AI",
+    "Javascript",
+    "UPV",
+    "OSCAR",
+    "GRyCAP"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.5",
+    "@types/multer": "^1.4.7",
+    "@types/node": "^18.15.11",
+    "@types/node-fetch": "^2.6.3",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "@types/cors": "^2.8.13",
+    "@types/express": "^4.17.17",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "js-yaml": "^4.1.0",
+    "multer": "^1.4.5-lts.1",
+    "node-fetch": "^2.6.9"
+  }
+}
