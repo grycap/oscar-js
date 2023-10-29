@@ -4,7 +4,9 @@
   "description": "Javascript client to interact with OSCAR cluster and services",
   "main": "./dist/index.js",
   "scripts": {
-    "start:prod": "node ./dist/index.js",
+    "start:prod": "node dist/index.js",
+    "start:dev": "nodemon src/app.ts",
+    "prod": "npm ci && npm start",
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

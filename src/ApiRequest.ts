@@ -33,6 +33,10 @@ export class ApiClient<T> {
       if (this.isServiceToken(authorization)) {
         this.auth = 'Bearer ' + authorization.split(' ')[1];
       }
+      else {
+        this.auth = 'Bearer ' + authorization.split(' ')[1];
+      }
+
       return this.auth;
     }
 
