@@ -9,12 +9,12 @@ import { UnauthorizedError } from "./requests/UnauthorizedError";
 import cors from 'cors';
 
 const app = express();
-const pathConfig = "system/config/";
-const pathInfo = "system/info/";
-const pathHealth = "health";
-const pathServices = "system/services/";
-const pathLogs = "system/logs/";
-const runSync = "run/";
+const pathConfig = "/system/config/";
+const pathInfo = "/system/info/";
+const pathHealth = "/health";
+const pathServices = "/system/services/";
+const pathLogs = "/system/logs/";
+const runSync = "/run/";
 const port = process.env.PORT || 3000;
 
 //middleware
@@ -280,4 +280,8 @@ app.delete("/logs/:serviceName/:jobName", async (req, res) => {
 // Iniciar el servidor en el puerto 3000
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
+  console.log(`OSCAR Endpoint ${process.env.OSCAR_ENDPOINT}`);
+  console.log(`OSCAR AuthType ${process.env.AUTH_TYPE}`);
+  console.log(`OSCAR username ${process.env.USERNAME}`);
+  console.log(`OSCAR password ${process.env.PASSWORD}`);
 });

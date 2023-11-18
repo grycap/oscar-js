@@ -1,10 +1,3 @@
-export interface ClientConfig {
-  oscar_endpoint: string,
-  auth_type: AuthType,
-  username: string,
-  password: string
-}
-
 export enum AuthType {
   Oidc = 'oidc',
   BasicAuth = 'basicauth',

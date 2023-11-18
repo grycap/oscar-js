@@ -1,24 +1,24 @@
 import fetch, { Headers } from 'node-fetch';
-import { AuthType, ClientConfig } from "./models/Models"
+import { AuthType } from "./models/Models"
 import * as fs from 'fs';
 import * as yaml from 'js-yaml';
 import { UnauthorizedError } from './requests/UnauthorizedError';
 
 
 export class ApiClient<T> {
-  private readonly clientConfig: ClientConfig;
-  private readonly oscar_endpoint: string;
+  private readonly oscar_endpoint = process.env.OSCAR_ENDPOINT || "http://localhost";
+  private readonly auth_type = process.env.AUTH_TYPE || "oidc";
+  private readonly username = process.env.USERNAME || "oscar";
+  private readonly password = process.env.PASSWORD || "oscar";
   private auth: string = "";
 
   constructor() {
-    const config: any = yaml.load(fs.readFileSync('./config.yml', 'utf8'));
-    this.clientConfig = config.client;
-    this.oscar_endpoint = this.clientConfig.oscar_endpoint;
+
   }
 
   setAuthParams(authorization?: any): string {
-    if (this.clientConfig.auth_type == AuthType.BasicAuth) {
-      this.auth = "Basic " + Buffer.from(this.clientConfig.username + ":" + this.clientConfig.password).toString("base64");
+    if (this.auth_type == AuthType.BasicAuth) {
+      this.auth = "Basic " + Buffer.from(this.username + ":" + this.password).toString("base64");
       
       if (this.isServiceToken(authorization)) {
         this.auth = 'Bearer ' + authorization.split(' ')[1];
@@ -28,7 +28,7 @@ export class ApiClient<T> {
   
     }
 
-    if (this.clientConfig.auth_type == AuthType.Oidc || authorization != undefined) {
+    if (this.auth_type == AuthType.Oidc || authorization != undefined) {
 
       if (this.isServiceToken(authorization)) {
         this.auth = 'Bearer ' + authorization.split(' ')[1];
@@ -36,10 +36,8 @@ export class ApiClient<T> {
       else {
         this.auth = 'Bearer ' + authorization.split(' ')[1];
       }
-
       return this.auth;
     }
-
     return this.auth;
   }
 
