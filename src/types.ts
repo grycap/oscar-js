@@ -1,18 +1,28 @@
+import { Client } from "./Client"
+
+export type ClusterAuth = {
+  clusterId: string, 
+  oscar_endpoint: string, 
+  username?: string,
+  password?: string,
+  oidc_token?: string 
+}
+
 export enum AuthType {
   Oidc = 'oidc',
   BasicAuth = 'basicauth',
 }
 
-export interface Config {
-  minio_provider: MiniIOProvider,
-  name: string,
-  namespace: string,
-  gpu_available: boolean,
-  serverless_backend: string,
-  yunikorn_enable: boolean
+export type RequestProps = {
+  path: string,
+  textResponse: boolean,
+  authType: AuthType,
+
+  client?: Client
+  authorization?: string
 }
 
-export interface Info {
+export type Info = {
   version:	string,
   git_commit: string,
   architecture:	string,
@@ -23,7 +33,17 @@ export interface Info {
   }
 }
 
-export interface Service {
+export type Config = {
+  minio_provider: MiniIOProvider,
+  name: string,
+  namespace: string,
+  gpu_available: boolean,
+  serverless_backend: string,
+  services_namespace: string,
+  yunikorn_enable: boolean
+}
+
+export type Service = {
   name:	string,
   cluster_id: string,
   memory: string
@@ -122,7 +142,7 @@ interface MiniIOProvider {
   verify: boolean
 }
 
-export interface JobInfo {
+export type JobInfo = {
   status: string,
   creation_time: string,
   start_time: string,
