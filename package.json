@@ -1,8 +1,8 @@
 {
   "name": "oscar-js",
-  "version": "1.0.5",
+  "version": "2.0.0",
   "type": "module",
-  "description": "Javascript client to interact with OSCAR cluster and services",
+  "description": "Javascript client to interact with OSCAR cluster and services. GRyCAP - i3M - Universitat Politècnica de València, Spain",
   "repository": {
     "type": "git",
     "url": "https://github.com/grycap/oscar-js"
