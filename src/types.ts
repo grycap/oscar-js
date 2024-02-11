@@ -1,8 +1,11 @@
-export interface ClientConfig {
-  oscar_endpoint: string,
-  auth_type: AuthType,
-  username: string,
-  password: string
+import { Client } from "./Client"
+
+export type ClusterAuth = {
+  clusterId: string, 
+  oscar_endpoint: string, 
+  username?: string,
+  password?: string,
+  oidc_token?: string 
 }
 
 export enum AuthType {
@@ -10,16 +13,16 @@ export enum AuthType {
   BasicAuth = 'basicauth',
 }
 
-export interface Config {
-  minio_provider: MiniIOProvider,
-  name: string,
-  namespace: string,
-  gpu_available: boolean,
-  serverless_backend: string,
-  yunikorn_enable: boolean
+export type RequestProps = {
+  path: string,
+  textResponse: boolean,
+  authType: AuthType,
+
+  client?: Client
+  authorization?: string
 }
 
-export interface Info {
+export type Info = {
   version:	string,
   git_commit: string,
   architecture:	string,
@@ -30,40 +33,51 @@ export interface Info {
   }
 }
 
-export interface Service {
+export type Config = {
+  minio_provider: MiniIOProvider,
+  name: string,
+  namespace: string,
+  gpu_available: boolean,
+  serverless_backend: string,
+  services_namespace: string,
+  yunikorn_enable: boolean
+}
+
+export type Service = {
   name:	string,
-  cluster_id: string,
+  cluster_id?: string,
   memory: string
   cpu: string,
   enable_gpu: boolean,  
-  total_mem: string
-  synchronous : {
+  total_memory: string,
+  total_cpu: string,
+  synchronous?: {
     min_scale: number,
     max_scale: number
   }
-  replicas: Array<Replica>,
-  rescheduler_threshold: number
-  token: string,
+  replicas?: Array<Replica>,
+  rescheduler_threshold?: number
+  token?: string,
   log_level: string,
   image: string,
-  alpine: boolean,
-  script: string,
-  image_pull_secrets: Array<String>,
-  environment: {
+  alpine?: boolean,
+  script?: string,
+  image_pull_secrets?: Array<String>,
+  environment?: {
     Variables : {
       [key: string]: string;
     }
   },
-  annotations: {
+  annotations?: {
     [key: string]: string;
   },
-  labels: {
+  labels?: {
     [key: string]: string;
   },
-  input: Array<StorageIOConfig>,
-  output: Array<StorageIOConfig> ,
-  storage_providers: StorageProviders,
-  clusters: Clusters
+  input?: Array<StorageIOConfig>,
+  output?: Array<StorageIOConfig> ,
+  storage_providers?: StorageProviders,
+  clusters?: Clusters
 }
 
 interface Clusters {
@@ -129,7 +143,7 @@ interface MiniIOProvider {
   verify: boolean
 }
 
-export interface JobInfo {
+export type JobInfo = {
   status: string,
   creation_time: string,
   start_time: string,
