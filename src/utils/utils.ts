@@ -11,7 +11,6 @@ export function setAuthParams(props: RequestProps ): string {
     if (isServiceToken(authorization)) {
       auth = 'Bearer ' + authorization?.split(' ')[1];
     }
-    console.log("BASIC AUTH", auth)
     return auth;
   }
 
@@ -23,7 +22,6 @@ export function setAuthParams(props: RequestProps ): string {
     else {
       auth = 'Bearer ' + authorization;
     }
-    console.log("Bearer AUTH", auth)
     return auth;
   }
   return auth;
@@ -57,7 +55,56 @@ export function tokenValidation(authorization?: string): string {
   }
 
   return authorization.split(' ')[1];
+}
 
+
+function base64ToHex(base64String: string) {
+  const binaryString = atob(base64String);
+  const blockSize = 4096; // Tamaño del bloque en bytes
+  let hexResult = '';
+  let offset = 0;
+
+  while (offset < binaryString.length) {
+      const block = binaryString.substr(offset, blockSize);
+      let blockHex = '';
+
+      for (let i = 0; i < block.length; i++) {
+          const hexChar = block.charCodeAt(i).toString(16);
+          blockHex += (hexChar.length === 1 ? '0' : '') + hexChar;
+      }
+
+      hexResult += blockHex;
+      offset += blockSize;
+  }
+
+  return hexResult;
+}
+
+export function getMimeType(base64String: string): string {
+
+  const decodedString = base64ToHex(base64String);
+  const signature = decodedString.substring(0, 8).toUpperCase(); 
+
+  const signatures: { [signature: string]: string } = {
+    'EFBBBF': 'text/plain',           // TXT
+    '89504E470D0A1A0A': 'image/png',  // PNG
+    '47494638': 'image/gif',          // GIF
+    'FFD8FF': 'image/jpeg',           // JPEG
+    '504B0304': 'application/zip',    // ZIP
+    '667479704D534E56': 'video/mp4',  // MP4
+    '52494646': 'audio/wav',          // WAV
+    '494433': 'audio/mpeg',           // MP3
+    // Añadir más firmas según sea necesario
+  };
+
+  for (const [signatureBytes, mimeType] of Object.entries(signatures)) {
+    if (signature.startsWith(signatureBytes)) {
+      return mimeType;
+    }
+  }
+
+  // Tipo MIME por defecto para datos binarios
+  return 'application/octet-stream';
 }
 
 export function decodeFromBase64(stringBase64: string) {
