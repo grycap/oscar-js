@@ -83,7 +83,8 @@ function base64ToHex(base64String: string) {
 export function getMimeType(base64String: string): string {
 
   const decodedString = base64ToHex(base64String);
-  const signature = decodedString.substring(0, 8).toUpperCase(); 
+  const signature = decodedString.substring(0, 16).toUpperCase(); 
+  console.info("Signature: ", signature);
 
   const signatures: { [signature: string]: string } = {
     'EFBBBF': 'text/plain',           // TXT
