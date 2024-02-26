@@ -1,6 +1,6 @@
 {
     "name": "oscar-js",
-    "version": "2.2.0",
+    "version": "2.2.1",
     "type": "module",
     "description": "Javascript client to interact with OSCAR cluster and services. GRyCAP - i3M - Universitat Politècnica de València, Spain",
     "repository": {
