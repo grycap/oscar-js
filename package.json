@@ -1,43 +1,44 @@
 {
-  "name": "oscar-js",
-  "version": "2.0.0",
-  "type": "module",
-  "description": "Javascript client to interact with OSCAR cluster and services. GRyCAP - i3M - Universitat Politècnica de València, Spain",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/grycap/oscar-js"
-  },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "scripts": {
-    "start:prod": "node dist/index.js",
-    "start:dev": "nodemon src/app.ts",
-    "build": "tsc",
-    "prepublishOnly": "npm run build",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [
-    "AI",
-    "Javascript",
-    "UPV",
-    "OSCAR",
-    "GRyCAP"
-  ],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@types/multer": "^1.4.7",
-    "@types/node": "^18.15.11",
-    "@types/node-fetch": "^2.6.3",
-    "ts-node": "^10.9.1",
-    "typescript": "^4.0.0"
-  },
-  "dependencies": {
-    "@types/cors": "^2.8.13",
-    "@types/express": "^4.17.17",
-    "cors": "^2.8.5",
-    "express": "^4.18.2",
-    "multer": "^1.4.5-lts.1",
-    "node-fetch": "^2.6.9"
-  }
+    "name": "oscar-js",
+    "version": "2.2.1",
+    "type": "module",
+    "description": "Javascript client to interact with OSCAR cluster and services. GRyCAP - i3M - Universitat Politècnica de València, Spain",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/grycap/oscar-js"
+    },
+    "main": "dist/index.js",
+    "module": "dist/index.mjs",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "start:prod": "node dist/index.js",
+        "start:dev": "nodemon src/app.ts",
+        "build": "tsc",
+        "prepublishOnly": "npm run build",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [
+        "AI",
+        "Javascript",
+        "UPV",
+        "OSCAR",
+        "GRyCAP"
+    ],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@types/multer": "^1.4.7",
+        "@types/node": "^18.15.11",
+        "@types/node-fetch": "^2.6.3",
+        "ts-node": "^10.9.1",
+        "typescript": "^4.0.0"
+    },
+    "dependencies": {
+        "@types/cors": "^2.8.13",
+        "@types/express": "^4.17.17",
+        "cors": "^2.8.5",
+        "express": "^4.18.2",
+        "multer": "^1.4.5-lts.1",
+        "node-fetch": "^2.6.9"
+    }
 }

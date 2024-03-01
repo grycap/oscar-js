@@ -2,7 +2,7 @@ import { PostRequest, PutRequest } from "./requests";
 import { GetRequest } from "./requests/GetRequest";
 import { UnauthorizedError } from "./requests/UnauthorizedError";
 import { AuthType, ClusterAuth, Config, Info, JobInfo, RequestProps, Service } from "./types";
-import { decodeFromBase64 } from "./utils/utils";
+import { decodeFromBase64, getMimeType } from "./utils/utils";
 
 const pathConfig = "/system/config/";
 const pathInfo = "/system/info/";
@@ -185,7 +185,6 @@ export class Client {
     return rta;
   }
 
-
   /**
    * Create a new service into OSCAR cluster. 
    * @param body service params
@@ -246,10 +245,9 @@ export class Client {
     
     const request = new PostRequest<JSON>();
     const response: any = await request.postRequest(props, dataEncoded);
-    const decodedResponse = decodeFromBase64(response);
 
-    const parsedResponse = JSON.parse(decodedResponse.replace(/'/g, '"'));
-    return parsedResponse;
+    const mimeType = getMimeType(response);
+    return {mime: mimeType, data: response};
 
   }
 }

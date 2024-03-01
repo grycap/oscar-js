@@ -19,10 +19,9 @@ export class PostRequest<T> {
             auth = setAuthParams(props);
         }
 
-        console.log("Final auth", auth);
         const headers = new Headers();
         headers.append("Authorization", auth);
-        headers.append("Content-Type", "application/json");
+        headers.append("Content-Type", "application/octet-stream");
         console.log("POST Request in url:", url);
 
         const response = await fetch(url, {
