@@ -1,7 +1,8 @@
 {
-    "name": "oscar-js",
-    "version": "2.2.1",
+    "name": "@grycap/oscar-js",
+    "version": "2.3.0",
     "type": "module",
+    "scope": "@grycap",
     "description": "Javascript client to interact with OSCAR cluster and services. GRyCAP - i3M - Universitat Politècnica de València, Spain",
     "repository": {
         "type": "git",
@@ -16,6 +17,9 @@
         "build": "tsc",
         "prepublishOnly": "npm run build",
         "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "publishConfig": {
+        "registry": "https://npm.pkg.github.com"
     },
     "keywords": [
         "AI",
