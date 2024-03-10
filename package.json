@@ -1,6 +1,6 @@
 {
     "name": "@grycap/oscar-js",
-    "version": "2.3.0",
+    "version": "2.3.1",
     "type": "module",
     "scope": "@grycap",
     "description": "Javascript client to interact with OSCAR cluster and services. GRyCAP - i3M - Universitat Politècnica de València, Spain",
